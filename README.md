@@ -5,7 +5,7 @@
 **An End-to-End, Distributed Framework for Transformer Pre-training,<br>Long-Context Scaling, and Compiler-Driven RLHF Alignment.**
 
 
-
+ 
 *Production-grade infrastructure for training LLMs from scratch, extending their context windows,<br>and aligning them for autonomous reasoning & tool-use.*
 
 </div>
