@@ -66,7 +66,7 @@ The name reflects the architecture's core philosophy: **the model improves itsel
 
 ## Core Features
 
-### 🔧 Custom Transformer Architecture (`titan/models/`)
+### Custom Transformer Architecture (`titan/models/`)
 - **Decoder-Only Transformer** with RMSNorm, SwiGLU MLP, and configurable depth/width
 - **Sliding Window Attention (SWA):** Reduces attention complexity from O(N²) to O(N×W), enabling practical 32K+ context processing
 - **Chunked Rotary Embeddings (RoPE):** Dynamic NTK-aware frequency scaling that extrapolates position encodings beyond the trained context window
