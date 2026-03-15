@@ -4,10 +4,7 @@
 
 **An End-to-End, Distributed Framework for Transformer Pre-training,<br>Long-Context Scaling, and Compiler-Driven RLHF Alignment.**
 
-[![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)](https://pytorch.org)
-[![DeepSpeed](https://img.shields.io/badge/DeepSpeed-000000.svg?style=for-the-badge&logo=deepin&logoColor=white)](https://www.deepspeed.ai/)
-[![FlashAttention](https://img.shields.io/badge/FlashAttention-FFCC00.svg?style=for-the-badge)](https://github.com/Dao-AILab/flash-attention)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+
 
 *Production-grade infrastructure for training LLMs from scratch, extending their context windows,<br>and aligning them for autonomous reasoning & tool-use.*
 
@@ -15,7 +12,7 @@
 
 ---
 
-## 🧬 Why Titan?
+## Why Titan?
 
 Most open-source LLM projects stop at fine-tuning a pre-trained model. **Titan goes deeper.** It implements the complete lifecycle of an LLM—from raw causal pre-training on terabytes of text, through mid-training context extension to 32K+ tokens, to rigorous RLHF alignment using both human feedback and compiler-driven self-play.
 
@@ -34,7 +31,7 @@ The name reflects the architecture's core philosophy: **the model improves itsel
 
 ---
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -67,7 +64,7 @@ The name reflects the architecture's core philosophy: **the model improves itsel
 
 ---
 
-## ✨ Core Features
+## Core Features
 
 ### 🔧 Custom Transformer Architecture (`titan/models/`)
 - **Decoder-Only Transformer** with RMSNorm, SwiGLU MLP, and configurable depth/width
@@ -75,13 +72,13 @@ The name reflects the architecture's core philosophy: **the model improves itsel
 - **Chunked Rotary Embeddings (RoPE):** Dynamic NTK-aware frequency scaling that extrapolates position encodings beyond the trained context window
 - **Recurrent Memory States:** Transformer-XL-style KV-cache routing that passes hidden states between sequence chunks, creating an infinitely long effective context
 
-### ⚡ Distributed Training at Scale (`titan/distributed/`)
+### Distributed Training at Scale (`titan/distributed/`)
 - **DeepSpeed ZeRO-3:** Automated configuration generation with CPU/NVMe offloading for optimizer states and parameters
 - **Selective Activation Checkpointing:** Only recomputes attention matrices during backprop (not MLP), saving ~60% VRAM with minimal compute overhead
 - **Microbatching:** Physical VRAM-aware gradient accumulation enabling effective batch sizes of 1024+ on limited hardware
 - **Memory Estimation:** Built-in utilities to calculate exact VRAM requirements before launching expensive training runs
 
-### 🎯 Advanced Alignment (`titan/training/`)
+### Advanced Alignment (`titan/training/`)
 - **Supervised Fine-Tuning (SFT):** Instruction tuning with prompt masking (loss computed only on assistant responses)
 - **Bradley-Terry Reward Model:** Pairwise preference learning using log-sigmoid objectives
 - **PPO (Proximal Policy Optimization):** Full Actor-Critic loop with:
@@ -91,42 +88,42 @@ The name reflects the architecture's core philosophy: **the model improves itsel
 - **DPO (Direct Preference Optimization):** Lightweight PPO alternative that eliminates the reward model entirely, with label smoothing support
 - **Compiler-Driven RLAIF:** Novel self-play loop where Python compilation/testing results serve as the reward signal
 
-### 📊 Data Pipelines (`titan/data/`)
+### Data Pipelines (`titan/data/`)
 - **Streaming Datasets:** Memory-efficient JSONL shard reading with multi-worker distribution
 - **Sequence Packing:** Concatenates short documents to fill context windows, maximizing GPU utilization
 - **Chunked Document Processing:** Overlapping window splits for long-context training with recurrent memory handoffs
 - **Preference Datasets:** Support for Anthropic HH-RLHF, UltraFeedback, and custom execution feedback formats
 - **Tool-Use Tokenization:** Special tokens for `<|tool_call|>`, `<|think|>`, and Chain-of-Thought formatting
 
-### 📈 Automated Evaluation (`titan/eval/`)
+### Automated Evaluation (`titan/eval/`)
 - **20+ Benchmarks:** GSM8k, HumanEval, MMLU, Tool-Use Execution, Chain-of-Thought logic
 - **LLM-as-Judge:** GPT-4/Claude evaluation for open-ended generation quality
 - **Report Generation:** Automated markdown reports with matplotlib comparison charts
 
-### 🌐 API Serving Layer (`titan/serving/`)
+### API Serving Layer (`titan/serving/`)
 - **OpenAI-Compatible REST API:** FastAPI server with `/v1/completions` and `/v1/chat/completions` endpoints
 - **Streaming (SSE):** Server-Sent Events for real-time token-by-token generation
 - **Inference Engine:** KV-cached autoregressive decoding with configurable sampling (temperature, top-p, top-k, repetition penalty)
 - **Production Middleware:** Request logging with tracing, token-bucket rate limiting, API key auth, and CUDA OOM error recovery
 
-### ☁️ Azure Cloud Integration (`titan/cloud/`)
+### Azure Cloud Integration (`titan/cloud/`)
 - **Azure Blob Storage:** Upload/download/list/delete model checkpoints from Azure containers
 - **Azure ML Workspace:** Experiment tracking, metric logging, hyperparameter recording, and Model Registry integration
 - **Managed Identity:** Support for Azure AD credentials and Key Vault secrets
 
-### 📡 Monitoring & Database (`titan/monitoring/`)
+### Monitoring & Database (`titan/monitoring/`)
 - **Experiment Database:** SQLite-backed tracking for runs, per-step metrics, checkpoints, and benchmark evaluations
 - **Prometheus Metrics:** Request latency histograms, tokens/sec throughput, GPU memory utilization, error rates
 - **Cross-Experiment Comparison:** Query benchmark scores across model versions
 
-### 🐳 Deployment & CI/CD
+### Deployment & CI/CD
 - **Docker:** Multi-stage Dockerfile with NVIDIA CUDA runtime and health checks
 - **Docker Compose:** Multi-service stack with inference server, Prometheus, and Grafana
 - **GitHub Actions:** Automated lint → test → Docker build pipeline with coverage reporting
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 ```
 Titan/
@@ -199,7 +196,7 @@ Titan/
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -259,7 +256,7 @@ python pipelines/3_rlhf_align.py \
 
 ---
 
-## 🔬 Technical Deep Dives
+## Technical Deep Dives
 
 ### Sliding Window Attention
 
@@ -324,7 +321,7 @@ Each chunk produces KV cache states that are detached (stopping gradient flow) a
 
 ---
 
-## 📜 Citation
+## Citation
 
 ```bibtex
 @software{titan2024,
@@ -337,12 +334,11 @@ Each chunk produces KV cache states that are detached (stopping gradient flow) a
 
 ---
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
+This project is licensed under
 
 ---
 
 <div align="center">
-<i>Built with ❤️ for the open-source AI research community</i>
 </div>
