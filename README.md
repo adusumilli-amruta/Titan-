@@ -1,6 +1,6 @@
 <div align="center">
 
-# ♾️ Project Titan
+# Project Titan
 
 **An End-to-End, Distributed Framework for Transformer Pre-training,<br>Long-Context Scaling, and Compiler-Driven RLHF Alignment.**
 
