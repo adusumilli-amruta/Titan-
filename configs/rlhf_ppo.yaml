@@ -1,0 +1,79 @@
+# ============================================================================
+# Project Titan — RLHF & PPO Alignment Configuration
+# ============================================================================
+# Stage 3: Reinforcement Learning from Human / AI Feedback
+# Trains the Actor-Critic PPO loop with KL-divergence penalties
+# against the frozen Reference model.
+# ============================================================================
+
+model:
+  actor_checkpoint: "checkpoints/context_scaled/final"
+  reward_model_checkpoint: "checkpoints/reward_model/final"
+  
+  # Reduced model size for 4-model PPO (Actor + Ref + Reward + Value)
+  # In production, Value model shares weights with Reward model base
+  share_value_reward_base: true
+
+ppo:
+  epochs: 4
+  num_rollouts: 128
+  chunk_size: 32                   # Mini-batches per PPO epoch
+  kl_coef: 0.1                    # KL penalty coefficient
+  kl_target: 6.0                  # Target KL divergence
+  adaptive_kl: true               # Dynamically adjust kl_coef
+  gamma: 1.0                      # Discount factor (1.0 for text)
+  lam: 0.95                       # GAE lambda
+  clip_range: 0.2                 # PPO clip range
+  clip_range_value: 0.2           # Value function clip range
+  vf_coef: 0.1                    # Value loss coefficient
+  max_grad_norm: 1.0
+
+generation:
+  max_new_tokens: 512
+  temperature: 0.7
+  top_p: 0.9
+  do_sample: true
+  repetition_penalty: 1.1
+
+reward_model:
+  training_epochs: 2
+  learning_rate: 1.0e-5
+  batch_size: 64
+  dataset: "Anthropic/hh-rlhf"
+  execution_feedback_dataset: "data/execution_feedback.jsonl"
+  use_execution_feedback: true     # Compiler-driven RLAIF
+
+training:
+  stage: "rlhf_ppo"
+  learning_rate: 1.0e-5            # Very low LR for alignment
+  weight_decay: 0.0
+  warmup_steps: 100
+  total_steps: 5000
+
+data:
+  tokenizer: "meta-llama/Llama-2-7b-hf"
+  max_prompt_length: 512
+  max_response_length: 512
+
+distributed:
+  strategy: "deepspeed_zero3"
+  mixed_precision: "bf16"
+  activation_checkpointing: true
+  cpu_offload_optimizer: true
+  cpu_offload_params: true
+  num_gpus: 8
+
+logging:
+  log_every_n_steps: 10
+  save_every_n_steps: 500
+  checkpoint_dir: "checkpoints/rlhf"
+  wandb_project: "titan-rlhf"
+
+evaluation:
+  eval_every_n_steps: 250
+  benchmarks:
+    - "gsm8k"
+    - "humaneval"
+    - "mmlu"
+    - "tool_use_exec"
+    - "chain_of_thought"

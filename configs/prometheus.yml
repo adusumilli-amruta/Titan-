@@ -1,0 +1,24 @@
+# ──────────────────────────────────────────────────────────
+# Prometheus Scrape Configuration for Project Titan
+# ──────────────────────────────────────────────────────────
+# Used by the Prometheus container in docker-compose.yml
+# Scrapes the inference server's metrics endpoint every 15s.
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # ── Titan Inference Server ──────────────────────────
+  - job_name: "titan-inference"
+    metrics_path: "/v1/metrics"
+    static_configs:
+      - targets: ["inference-server:8000"]
+        labels:
+          service: "titan"
+          component: "inference"
+
+  # ── Prometheus Self-Monitoring ─────────────────────────
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]

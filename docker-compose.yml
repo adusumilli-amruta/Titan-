@@ -1,0 +1,58 @@
+# ──────────────────────────────────────────────────────────
+# Project Titan — Multi-Service Deployment
+# ──────────────────────────────────────────────────────────
+# Services:
+#   1. inference-server  — FastAPI model serving
+#   2. prometheus        — Metrics scraping
+#   3. grafana           — Monitoring dashboard (optional)
+# ──────────────────────────────────────────────────────────
+
+version: "3.8"
+
+services:
+  inference-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - TITAN_MODEL_PATH=/models/checkpoint
+      - TITAN_DEVICE=cuda
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ./checkpoints:/models/checkpoint:ro
+      - ./configs:/app/configs:ro
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - inference-server
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=titan
+    depends_on:
+      - prometheus
+    restart: unless-stopped

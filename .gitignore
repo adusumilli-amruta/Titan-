@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual Environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Training Artifacts
+checkpoints/
+reports/
+wandb/
+*.pt
+*.bin
+*.safetensors
+
+# Data
+data/*.jsonl
+data/*.json
+data/*.txt
+*.parquet
+
+# DeepSpeed
+ds_zero3_config.json
+hostfile
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Notebooks
+.ipynb_checkpoints/
