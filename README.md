@@ -319,24 +319,7 @@ Each chunk produces KV cache states that are detached (stopping gradient flow) a
               + Value Model
 ```
 
----
 
-## Citation
-
-```bibtex
-@software{titan2024,
-  title={Project Titan: Distributed Framework for LLM Pre-training, Long-Context, and RLHF},
-  author={AI Researcher},
-  year={2024},
-  url={https://github.com/yourusername/Titan}
-}
-```
-
----
-
-## License
-
-This project is licensed under
 
 ---
 
