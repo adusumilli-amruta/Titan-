@@ -14,9 +14,9 @@
 
 ## Why Titan?
 
-Most open-source LLM projects stop at fine-tuning a pre-trained model. **Titan goes deeper.** It implements the complete lifecycle of an LLM—from raw causal pre-training on terabytes of text, through mid-training context extension to 32K+ tokens, to rigorous RLHF alignment using both human feedback and compiler-driven self-play.
+Most open-source LLM projects stop at fine-tuning a pre-trained model. **Titan goes deeper.** It implements the complete lifecycle of an LLM from raw causal pre-training on terabytes of text, through mid-training context extension to 32K+ tokens, to rigorous RLHF alignment using both human feedback and compiler-driven self-play.
 
-The name reflects the architecture's core philosophy: **the model improves itself.** Like the mythical serpent consuming its own tail, the RLAIF (Reinforcement Learning from AI Feedback) pipeline generates code, compiles it, tests it, and learns from its own execution results—creating a self-improving loop for mathematical reasoning and tool-use.
+The name reflects the architecture's core philosophy: **the model improves itself.** Like the mythical serpent consuming its own tail, the RLAIF (Reinforcement Learning from AI Feedback) pipeline generates code, compiles it, tests it, and learns from its own execution results creating a self-improving loop for mathematical reasoning and tool-use.
 
 ### Key Results
 
@@ -69,7 +69,7 @@ The name reflects the architecture's core philosophy: **the model improves itsel
 ### Custom Transformer Architecture (`titan/models/`)
 - **Decoder-Only Transformer** with RMSNorm, SwiGLU MLP, and configurable depth/width
 - **Sliding Window Attention (SWA):** Reduces attention complexity from O(N²) to O(N×W), enabling practical 32K+ context processing
-- **Chunked Rotary Embeddings (RoPE):** Dynamic NTK-aware frequency scaling that extrapolates position encodings beyond the trained context window
+- **Chunked Rotary Embeddings (RoPE):** Dynamic NTK aware frequency scaling that extrapolates position encodings beyond the trained context window
 - **Recurrent Memory States:** Transformer-XL-style KV-cache routing that passes hidden states between sequence chunks, creating an infinitely long effective context
 
 ### Distributed Training at Scale (`titan/distributed/`)
